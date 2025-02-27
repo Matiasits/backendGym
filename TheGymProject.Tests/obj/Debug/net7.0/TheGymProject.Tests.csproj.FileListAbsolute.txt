@@ -1,0 +1,6 @@
+C:\Users\Matias\Desktop\Proyectos Clientes\Mati Andrenacci\back\TheGymProject\TheGymProject.Tests\bin\Debug\net7.0\CoverletSourceRootsMapping
+C:\Users\Matias\Desktop\Proyectos Clientes\Mati Andrenacci\back\TheGymProject\TheGymProject.Tests\obj\Debug\net7.0\TheGymProject.Tests.csproj.AssemblyReference.cache
+C:\Users\Matias\Desktop\Proyectos Clientes\Mati Andrenacci\back\TheGymProject\TheGymProject.Tests\obj\Debug\net7.0\TheGymProject.Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Matias\Desktop\Proyectos Clientes\Mati Andrenacci\back\TheGymProject\TheGymProject.Tests\obj\Debug\net7.0\TheGymProject.Tests.AssemblyInfoInputs.cache
+C:\Users\Matias\Desktop\Proyectos Clientes\Mati Andrenacci\back\TheGymProject\TheGymProject.Tests\obj\Debug\net7.0\TheGymProject.Tests.AssemblyInfo.cs
+C:\Users\Matias\Desktop\Proyectos Clientes\Mati Andrenacci\back\TheGymProject\TheGymProject.Tests\obj\Debug\net7.0\TheGymProject.Tests.csproj.CoreCompileInputs.cache

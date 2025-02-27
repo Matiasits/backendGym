@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34221.43
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheGymProject", "TheGymProject\TheGymProject.csproj", "{75AD2C97-6F53-413D-91AB-CCBFD6EB1D3F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheGymProject.Tests", "TheGymProject.Tests\TheGymProject.Tests.csproj", "{FAFEA7C6-FE19-47D6-8F84-171D3633AE3F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{75AD2C97-6F53-413D-91AB-CCBFD6EB1D3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75AD2C97-6F53-413D-91AB-CCBFD6EB1D3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75AD2C97-6F53-413D-91AB-CCBFD6EB1D3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75AD2C97-6F53-413D-91AB-CCBFD6EB1D3F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAFEA7C6-FE19-47D6-8F84-171D3633AE3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAFEA7C6-FE19-47D6-8F84-171D3633AE3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAFEA7C6-FE19-47D6-8F84-171D3633AE3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAFEA7C6-FE19-47D6-8F84-171D3633AE3F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B7E512A-16DC-48D4-91B5-B936A63392E1}
+	EndGlobalSection
+EndGlobal
