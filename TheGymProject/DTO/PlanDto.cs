@@ -2,6 +2,7 @@
 {
     public class PlanDto
     {
+        public int PlanId { get; set; } 
         public string Nombre { get; set; } = null!;
         public DateTime FHInicio { get; set; }
         public DateTime FHVencimiento { get; set; }

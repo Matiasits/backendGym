@@ -16,54 +16,96 @@ namespace TheGymProject.Service
             _mapper = mapper;
         }
 
-        public async Task<(bool Success, int DiasRestantes, bool PlanActivo, int? DiasAdicionales, bool EsPlanTresVecesPorSemana)>RegistrarAsistenciaAlumno(AsistenciaDto asistenciaDto)
+        public async Task<(bool Success, int DiasRestantes, bool PlanActivo, int? DiasAdicionales, bool EsPlanTresVecesPorSemana, string FechaInicioFormateada, string FechaVencimientoFormateada)>
+        RegistrarAsistenciaAlumno(AsistenciaDto asistenciaDto)
         {
-            var alumno = await _context.Alumno
-                .Include(a => a.AlumnoPlanes)
-                    .ThenInclude(ap => ap.Plan) // Incluir la relación con el Plan
-                .FirstOrDefaultAsync(a => a.DNI == asistenciaDto.DNIAlumno);
+            var alumno = await ObtenerAlumnoConPlanesYAsistencias(asistenciaDto.DNIAlumno);
+            if (alumno == null) return (false, 0, false, 0, false, string.Empty, string.Empty);
 
-            if (alumno == null) return (false, 0, false, 0, false);
-
-            var asistencia = _mapper.Map<Asistencia>(asistenciaDto);
-            asistencia.AlumnoId = alumno.AlumnoId;
-            asistencia.FHRegistro = DateTime.Now;
-
+            var asistencia = CrearAsistencia(asistenciaDto, alumno.AlumnoId);
             _context.Asistencia.Add(asistencia);
 
-            // Obtener el plan más reciente del alumno
-            var planActivo = alumno.AlumnoPlanes
+            var planActivo = ObtenerPlanActivo(alumno);
+            var (diasRestantes, estaActivo, esPlanTresVecesPorSemana) = EvaluarEstadoDelPlan(planActivo, asistencia.FHRegistro);
+
+            if (!estaActivo || esPlanTresVecesPorSemana)
+            {
+                ActualizarDiasAdicionales(alumno, esPlanTresVecesPorSemana);
+            }
+
+            await _context.SaveChangesAsync();
+
+            var (fechaInicioFormateada, fechaVencimientoFormateada) = FormatearFechasPlan(planActivo);
+            return (true, diasRestantes, estaActivo, alumno.DiasAdicionales, esPlanTresVecesPorSemana, fechaInicioFormateada, fechaVencimientoFormateada);
+        }
+
+        private async Task<Alumno> ObtenerAlumnoConPlanesYAsistencias(int dni)
+        {
+            return await _context.Alumno
+                .Include(a => a.AlumnoPlanes)
+                    .ThenInclude(ap => ap.Plan)
+                .Include(a => a.Asistencias)
+                .FirstOrDefaultAsync(a => a.DNI == dni);
+        }
+
+        private Asistencia CrearAsistencia(AsistenciaDto asistenciaDto, int alumnoId)
+        {
+            var asistencia = _mapper.Map<Asistencia>(asistenciaDto);
+            asistencia.AlumnoId = alumnoId;
+            asistencia.FHRegistro = DateTime.Now;
+            return asistencia;
+        }
+
+        private AlumnoPlan ObtenerPlanActivo(Alumno alumno)
+        {
+            return alumno.AlumnoPlanes
                 .OrderByDescending(p => p.FHVencimiento)
                 .FirstOrDefault();
+        }
 
-            int diasRestantes = 0;
-            bool estaActivo = false;
-            bool esPlanTresVecesPorSemana = false;
+        private (int diasRestantes, bool estaActivo, bool esPlanTresVecesPorSemana) EvaluarEstadoDelPlan(AlumnoPlan planActivo, DateTime fechaRegistro)
+        {
+            if (planActivo == null) return (0, false, false);
 
-            if (planActivo != null)
+            int diasRestantes = (planActivo.FHVencimiento - fechaRegistro).Days;
+            bool estaActivo = fechaRegistro >= planActivo.FHInicio && fechaRegistro <= planActivo.FHVencimiento;
+            bool esPlanTresVecesPorSemana = planActivo.PlanId == 3;
+
+            return (diasRestantes, estaActivo, esPlanTresVecesPorSemana);
+        }
+
+        private void ActualizarDiasAdicionales(Alumno alumno, bool esPlanTresVecesPorSemana)
+        {
+            if (esPlanTresVecesPorSemana)
             {
-                diasRestantes = (planActivo.FHVencimiento - asistencia.FHRegistro).Days;
-                estaActivo = asistencia.FHRegistro >= planActivo.FHInicio && asistencia.FHRegistro <= planActivo.FHVencimiento;
-
-                // Verificar si el plan es de tres veces por semana (ajusta la condición según tu modelo)
-                esPlanTresVecesPorSemana = planActivo.Plan.Nombre.Contains("Pase estandar", StringComparison.OrdinalIgnoreCase);
-
-                if (!estaActivo)
+                if (ValidarLimiteAsistenciasPlanSemanal(alumno))
                 {
-                    // Si el plan está vencido, incrementar el contador de días adicionales
                     alumno.DiasAdicionales++;
                 }
             }
             else
             {
-                // Si no tiene ningún plan, también contar los días adicionales
                 alumno.DiasAdicionales++;
             }
-
-            await _context.SaveChangesAsync();
-
-            return (true, diasRestantes, estaActivo, alumno.DiasAdicionales, esPlanTresVecesPorSemana);
         }
 
+        private bool ValidarLimiteAsistenciasPlanSemanal(Alumno alumno)
+        {
+            int asistenciasUltimaSemana = alumno.Asistencias
+                .Where(a => a.FHRegistro >= DateTime.Now.AddDays(-7))
+                .Count();
+
+            return asistenciasUltimaSemana >= 3;
+        }
+
+        private (string fechaInicio, string fechaVencimiento) FormatearFechasPlan(AlumnoPlan planActivo)
+        {
+            if (planActivo == null) return (string.Empty, string.Empty);
+
+            string fechaInicioFormateada = planActivo.FHInicio.ToString("dd/MM/yyyy");
+            string fechaVencimientoFormateada = planActivo.FHVencimiento.ToString("dd/MM/yyyy");
+
+            return (fechaInicioFormateada, fechaVencimientoFormateada);
+        }
     }
 }

@@ -4,11 +4,11 @@ public class GimnasioDbContext : DbContext
 {
     public GimnasioDbContext(DbContextOptions<GimnasioDbContext> options) : base(options) { }
 
-    public DbSet<Alumno> Alumno { get; set; }
-    public DbSet<Profesor> Profesor { get; set; }
-    public DbSet<Plan> Planes { get; set; }
-    public DbSet<Asistencia> Asistencia { get; set; }
-    public DbSet<AlumnoPlan> AlumnoPlan { get; set; }
+    public DbSet<Alumno> Alumno { get; set; } = null!;
+    public DbSet<Profesor> Profesor { get; set; } = null!;  
+    public DbSet<Plan> Planes { get; set; } = null!;
+    public DbSet<Asistencia> Asistencia { get; set; } = null!;
+    public DbSet<AlumnoPlan> AlumnoPlan { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

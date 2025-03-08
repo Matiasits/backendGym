@@ -20,7 +20,8 @@ namespace TheGymProject.Controllers
         [HttpPost("registrar")]
         public async Task<IActionResult> RegistrarAsistencia([FromBody] AsistenciaDto asistenciaDto)
         {
-            var (success, diasRestantes, planActivo, diasAdicionales, esPaseLire) = await _asistenciaService.RegistrarAsistenciaAlumno(asistenciaDto);
+            var (success, diasRestantes, planActivo, diasAdicionales, esPlanTresVecesPorSemana, fechaInicio, fechaVencimiento) =
+                await _asistenciaService.RegistrarAsistenciaAlumno(asistenciaDto);
 
             if (!success) return NotFound("Alumno no encontrado.");
 
@@ -29,8 +30,10 @@ namespace TheGymProject.Controllers
                 Message = "Asistencia registrada correctamente.",
                 DiasRestantes = diasRestantes,
                 PlanActivo = planActivo,
-                DiasAdicionaes = diasAdicionales,
-                esPaseLibre = esPaseLire
+                DiasAdicionales = diasAdicionales,
+                EsPlanTresVecesPorSemana = esPlanTresVecesPorSemana,
+                FechaInicioFormateada = fechaInicio,
+                FechaVencimientoFormateada = fechaVencimiento
             });
         }
 

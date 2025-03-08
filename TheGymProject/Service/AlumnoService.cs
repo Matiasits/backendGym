@@ -21,6 +21,7 @@ namespace TheGymProject.Service
             var alumnos = await _context.Alumno
                 .Include(a => a.AlumnoPlanes)
                 .Include(ap => ap.Plan)
+                .AsSplitQuery()
                 .ToListAsync();
             return _mapper.Map<IEnumerable<AlumnoDto>>(alumnos);
         }
@@ -50,10 +51,19 @@ namespace TheGymProject.Service
             var alumno = await _context.Alumno.FirstOrDefaultAsync(a => a.DNI == dni);
             if (alumno == null) return false;
 
-            _mapper.Map(alumnoDto, alumno);
+            alumno.Nombre = alumnoDto.Nombre;
+            alumno.Apellido = alumnoDto.Apellido;
+            alumno.Domicilio = alumnoDto.Domicilio;
+            alumno.Telefono = alumnoDto.Telefono;
+            alumno.TelefonoEmergencia = alumnoDto.TelefonoEmergencia;
+
+            alumno.PlanId = alumnoDto.PlanId;
+
             await _context.SaveChangesAsync();
+
             return true;
         }
+
 
         public async Task<bool> DeleteAlumno(int dni)
         {
@@ -69,10 +79,15 @@ namespace TheGymProject.Service
         {
             var alumno = await _context.Alumno
                 .Include(a => a.AlumnoPlanes)
-                .ThenInclude(ap => ap.Plan)
+                .Include(ap => ap.Plan)
                 .FirstOrDefaultAsync(a => a.DNI == dni);
 
-            return alumno is not null ? _mapper.Map<AlumnoDto>(alumno) : null;
+
+            var planId = alumno.PlanId;
+
+            var alumnoDto = _mapper.Map<AlumnoDto>(alumno);
+
+            return alumnoDto;
         }
 
     }
