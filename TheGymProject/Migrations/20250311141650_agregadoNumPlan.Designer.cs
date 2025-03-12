@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace TheGymProject.Migrations
 {
     [DbContext(typeof(GimnasioDbContext))]
-    partial class GimnasioDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250311141650_agregadoNumPlan")]
+    partial class agregadoNumPlan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +46,7 @@ namespace TheGymProject.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("NumeroPlan")
+                    b.Property<int>("NumeroPlan")
                         .HasColumnType("int");
 
                     b.Property<int>("PlanId")

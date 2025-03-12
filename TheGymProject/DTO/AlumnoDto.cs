@@ -13,6 +13,7 @@ namespace TheGymProject.DTO
         public DateTime FechaRegistro { get; set; }
         public string FechaRegistroFormateada => FechaRegistro.ToString("dd/MM/yyyy");
         public int DiasAdicionales { get; set; }
+        public int? NumeroPlan { get; set; }
         public int PlanId { get; set; }
         public PlanDto? Plan { get; set; }
         public List<AlumnoPlanDto> AlumnoPlanes { get; set; } = new List<AlumnoPlanDto>();

@@ -13,8 +13,12 @@
         "packagesPath": "C:\\Users\\Matias\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Matias\\Desktop\\Proyectos Clientes\\Mati Andrenacci\\back\\TheGymProject\\TheGymProject.Tests\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\Matias\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -98,8 +102,12 @@
         "packagesPath": "C:\\Users\\Matias\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\Matias\\Desktop\\Proyectos Clientes\\Mati Andrenacci\\back\\TheGymProject\\TheGymProject\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
           "C:\\Users\\Matias\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

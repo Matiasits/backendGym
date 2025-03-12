@@ -17,9 +17,9 @@ namespace TheGymProject.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AlumnoDto>>> GetAlumnos()
+        public async Task<ActionResult<IEnumerable<AlumnoDto>>> GetAlumnos([FromQuery] int page = 1, [FromQuery] int pageSize = 10)
         {
-            var alumnos = await _alumnoService.GetAlumnos();
+            var alumnos = await _alumnoService.GetAlumnos(page, pageSize);
             return Ok(alumnos);
         }
 

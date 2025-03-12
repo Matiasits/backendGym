@@ -16,13 +16,16 @@ namespace TheGymProject.Service
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<AlumnoDto>> GetAlumnos()
+        public async Task<IEnumerable<AlumnoDto>> GetAlumnos(int page = 1, int pageSize = 10)
         {
             var alumnos = await _context.Alumno
                 .Include(a => a.AlumnoPlanes)
                 .Include(ap => ap.Plan)
                 .AsSplitQuery()
+                .Skip((page - 1) * pageSize)  
+                .Take(pageSize)               
                 .ToListAsync();
+
             return _mapper.Map<IEnumerable<AlumnoDto>>(alumnos);
         }
 
@@ -56,6 +59,7 @@ namespace TheGymProject.Service
             alumno.Domicilio = alumnoDto.Domicilio;
             alumno.Telefono = alumnoDto.Telefono;
             alumno.TelefonoEmergencia = alumnoDto.TelefonoEmergencia;
+            alumno.NumeroPlan = alumnoDto.NumeroPlan;
 
             alumno.PlanId = alumnoDto.PlanId;
 

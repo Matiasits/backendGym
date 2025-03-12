@@ -12,6 +12,7 @@ public class Alumno
     public string? TelefonoEmergencia { get; set; }
     public DateTime FechaRegistro { get; set; } = DateTime.UtcNow;
     public int DiasAdicionales { get; set; }
+    public int? NumeroPlan { get; set; } 
     public int PlanId { get; set; }
 
     // Relaciones
