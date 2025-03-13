@@ -15,12 +15,11 @@ var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<stri
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("api-cors", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.SetIsOriginAllowed(_ => true) 
+        policy.WithOrigins("https://thegymprojectfront.onrender.com") // tu URL del frontend
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials(); 
+              .AllowAnyMethod();
     });
 });
 
@@ -65,6 +64,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.UseCors("api-cors");
+app.UseCors("AllowFrontend");
 
 app.Run();
