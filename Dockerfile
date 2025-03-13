@@ -1,22 +1,17 @@
-# Etapa 1: build de la app
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+# Usa la imagen base de .NET 6
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
 
-# Copiamos el contenido del proyecto
-COPY . ./
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
 
-# Publicamos la app en modo Release
-RUN dotnet publish -c Release -o out
+COPY . .
 
-# Etapa 2: imagen más liviana para correr la app
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+RUN dotnet restore "./TheGymProject/TheGymProject.csproj"
+RUN dotnet build "./TheGymProject/TheGymProject.csproj" -c Release -o /app/build
+RUN dotnet publish "./TheGymProject/TheGymProject.csproj" -c Release -o /app/publish
+
+FROM base AS final
 WORKDIR /app
-
-# Copiamos el resultado del build
-COPY --from=build /app/out .
-
-# Exponemos el puerto que usará la app en Render
-EXPOSE 80
-
-# Comando para iniciar la app
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "TheGymProject.dll"]
