@@ -8,14 +8,14 @@ COPY . ./
 # Publicamos la app en modo Release
 RUN dotnet publish -c Release -o out
 
-# Etapa 2: imagen m·s liviana para correr la app
+# Etapa 2: imagen m√°s liviana para correr la app
 FROM mcr.microsoft.com/dotnet/aspnet:7.0
 WORKDIR /app
 
 # Copiamos el resultado del build
 COPY --from=build /app/out .
 
-# Exponemos el puerto que usar· la app en Render
+# Exponemos el puerto que usar√° la app en Render
 EXPOSE 80
 
 # Comando para iniciar la app
