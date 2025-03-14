@@ -32,6 +32,7 @@ namespace TheGymProject.Service
         public async Task<bool> CreateAlumno(AlumnoDto alumnoDto)
         {
             var alumno = _mapper.Map<Alumno>(alumnoDto);
+            alumno.FechaRegistro = DateTime.Now;
             _context.Alumno.Add(alumno);
             await _context.SaveChangesAsync();
 
