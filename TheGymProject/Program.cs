@@ -57,9 +57,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowFrontend");
+app.UseDeveloperExceptionPage(); // Esto muestra el error real en consola Render
 
 app.UseAuthorization();
 
