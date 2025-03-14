@@ -56,9 +56,14 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseHttpsRedirection(); // solo en desarrollo
+}
+else
+{
+    // En producción no lo uses
+    // app.UseHttpsRedirection(); // comentado en prod
 }
 
-app.UseHttpsRedirection();
 
 app.UseCors("AllowFrontend");
 app.UseDeveloperExceptionPage(); // Esto muestra el error real en consola Render
