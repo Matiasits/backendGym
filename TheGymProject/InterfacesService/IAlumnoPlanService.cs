@@ -9,5 +9,6 @@ namespace TheGymProject.InterfacesService
         Task<bool> CreateAlumnoPlan(AlumnoPlanDto alumnoPlanDto);
         Task<IEnumerable<AlumnoPlanDto>> GetAlumnoPlanes();
         Task<bool> RenovarSuscripcion(int dni, int diasARestar);
+        Task<bool> ActualizarPlanActivo(int dni, int nuevoPlanId);
     }
 }
