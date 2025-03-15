@@ -9,11 +9,12 @@ namespace TheGymProject.Service
     {
         private readonly GimnasioDbContext _context;
         private readonly IMapper _mapper;
-
-        public AlumnoService(GimnasioDbContext context, IMapper mapper)
+        private readonly IAlumnoPlanService _alumnoPlanService;
+        public AlumnoService(GimnasioDbContext context, IMapper mapper, IAlumnoPlanService alumnoPlanService)
         {
             _context = context;
             _mapper = mapper;
+            _alumnoPlanService = alumnoPlanService;
         }
 
         public async Task<IEnumerable<AlumnoDto>> GetAlumnos(int page = 1, int pageSize = 10)
@@ -63,6 +64,10 @@ namespace TheGymProject.Service
             alumno.NumeroPlan = alumnoDto.NumeroPlan;
 
             alumno.PlanId = alumnoDto.PlanId;
+
+
+
+            await _alumnoPlanService.ActualizarPlanActivo(dni, alumnoDto.PlanId);
 
             await _context.SaveChangesAsync();
 

@@ -76,5 +76,19 @@ namespace TheGymProject.Service
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> ActualizarPlanActivo(int dni, int nuevoPlanId)
+        {
+            var alumnoPlan = await _context.AlumnoPlan
+                .Include(ap => ap.Alumno)
+                .FirstOrDefaultAsync(ap => ap.Alumno.DNI == dni);
+
+            if (alumnoPlan == null) return false;
+
+            alumnoPlan.PlanId = nuevoPlanId;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }

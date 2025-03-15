@@ -68,7 +68,7 @@ namespace TheGymProject.Service
 
             int diasRestantes = (planActivo.FHVencimiento - fechaRegistro).Days;
             bool estaActivo = fechaRegistro >= planActivo.FHInicio && fechaRegistro <= planActivo.FHVencimiento;
-            bool esPlanTresVecesPorSemana = planActivo.PlanId == 3;
+            bool esPlanTresVecesPorSemana = planActivo.PlanId == 1;
 
             return (diasRestantes, estaActivo, esPlanTresVecesPorSemana);
         }
