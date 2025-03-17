@@ -37,5 +37,17 @@ namespace TheGymProject.Controllers
             });
         }
 
+        [HttpGet("resumen-mensual")]
+        public async Task<IActionResult> ObtenerResumenMensual()
+        {
+            var (alumnos, cantidad, gananciaTotal) = await _asistenciaService.ObtenerResumenMensual();
+
+            return Ok(new
+            {
+                Cantidad = cantidad,
+                GananciaTotal = gananciaTotal,
+                Alumnos = alumnos
+            });
+        }
     }
 }

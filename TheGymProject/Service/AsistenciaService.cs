@@ -115,5 +115,44 @@ namespace TheGymProject.Service
 
             return (fechaInicioFormateada, fechaVencimientoFormateada);
         }
+
+        public async Task<(List<AlumnoDto> Alumnos, int Cantidad, decimal GananciaTotal)> ObtenerResumenMensual()
+        {
+            var fechaFin = DateTime.Today;
+            var fechaInicio = fechaFin.AddMonths(-1);
+
+            // 1. Obtener asistencias del último mes con alumnos y sus planes
+            var asistencias = await _context.Asistencia
+                .Where(a => a.FHRegistro.Date >= fechaInicio.Date && a.FHRegistro.Date <= fechaFin.Date)
+                .Include(a => a.Alumno)
+                    .ThenInclude(al => al.AlumnoPlanes)
+                        .ThenInclude(ap => ap.Plan)
+                .Select(a => a.Alumno)
+                .Distinct()
+                .ToListAsync();
+
+            // 2. Calcular ganancia total por planes vigentes en el rango
+            decimal gananciaTotal = asistencias
+                .GroupBy(a => a.AlumnoId) // agrupar por alumno
+                .Select(g =>
+                {
+                    var alumno = g.First();
+
+                    // Validar que el alumno tenga al menos un plan vigente en el rango
+                    bool tienePlanVigente = alumno.AlumnoPlanes.Any(ap =>
+                        ap.FHInicio.Date <= fechaFin.Date &&
+                        ap.FHVencimiento.Date >= fechaInicio.Date
+                    );
+
+                    return tienePlanVigente ? alumno.Plan?.Precio ?? 0 : 0;
+                })
+                .Sum();
+
+
+            // 3. Mapear alumnos a DTOs
+            var alumnosDto = _mapper.Map<List<AlumnoDto>>(asistencias);
+
+            return (alumnosDto, alumnosDto.Count, gananciaTotal);
+        }
     }
 }
