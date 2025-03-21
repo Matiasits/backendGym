@@ -25,11 +25,11 @@ namespace TheGymProject.Service
             _context.Asistencia.Add(asistencia);
 
             var planActivo = ObtenerPlanActivo(alumno);
-            var (diasRestantes, estaActivo, esPlanTresVecesPorSemana) = EvaluarEstadoDelPlan(planActivo, asistencia.FHRegistro);
+            var (diasRestantes, estaActivo, esPlanTresVecesPorSemana) = EvaluarEstadoDelPlan(planActivo, asistencia.FHRegistro); 
 
             if (!estaActivo || esPlanTresVecesPorSemana)
             {
-                ActualizarDiasAdicionales(alumno, esPlanTresVecesPorSemana);
+                ActualizarDiasAdicionales(alumno, esPlanTresVecesPorSemana, asistencia);
             }
 
             await _context.SaveChangesAsync();
@@ -64,8 +64,7 @@ namespace TheGymProject.Service
 
         private (int diasRestantes, bool estaActivo, bool esPlanTresVecesPorSemana) EvaluarEstadoDelPlan(AlumnoPlan planActivo, DateTime fechaRegistro)
         {
-            if (planActivo == null) return (0, false, false);
-
+            
             int diasRestantes = (planActivo.FHVencimiento - fechaRegistro).Days;
             bool estaActivo = fechaRegistro >= planActivo.FHInicio && fechaRegistro <= planActivo.FHVencimiento;
             bool esPlanTresVecesPorSemana = planActivo.PlanId == 1;
@@ -73,11 +72,11 @@ namespace TheGymProject.Service
             return (diasRestantes, estaActivo, esPlanTresVecesPorSemana);
         }
 
-        private void ActualizarDiasAdicionales(Alumno alumno, bool esPlanTresVecesPorSemana)
+        private void ActualizarDiasAdicionales(Alumno alumno, bool esPlanTresVecesPorSemana, Asistencia asistencia)
         {
             if (esPlanTresVecesPorSemana)
             {
-                if (ValidarLimiteAsistenciasPlanSemanal(alumno))
+                if (ValidarLimiteAsistenciasPlanSemanal(alumno, asistencia))
                 {
                     alumno.DiasAdicionales++;
                 }
@@ -88,22 +87,20 @@ namespace TheGymProject.Service
             }
         }
 
-        private bool ValidarLimiteAsistenciasPlanSemanal(Alumno alumno)
+        private bool ValidarLimiteAsistenciasPlanSemanal(Alumno alumno, Asistencia nuevaAsistencia)
         {
             var hoy = DateTime.Now.Date;
 
-            // Lunes de esta semana
             var inicioSemana = hoy.AddDays(-(int)hoy.DayOfWeek + (int)DayOfWeek.Monday);
-
-            // Sábado de esta semana
             var finSemana = inicioSemana.AddDays(5);
 
             int asistenciasSemana = alumno.Asistencias
                 .Where(a => a.FHRegistro.Date >= inicioSemana && a.FHRegistro.Date <= finSemana)
                 .Count();
 
-            return asistenciasSemana >= 3;
+            return asistenciasSemana > 3; 
         }
+
 
 
         private (string fechaInicio, string fechaVencimiento) FormatearFechasPlan(AlumnoPlan planActivo)
@@ -153,6 +150,19 @@ namespace TheGymProject.Service
             var alumnosDto = _mapper.Map<List<AlumnoDto>>(asistencias);
 
             return (alumnosDto, alumnosDto.Count, gananciaTotal);
+        }
+
+        public async Task<List<AsistenciaDto>> ObtenerAsistenciasDelDia()
+        {
+            var hoy = DateTime.Today;
+            var asistencias = await _context.Asistencia
+                .Where(a => a.FHRegistro.Date == hoy)
+                .Include(a => a.Alumno)
+                .ToListAsync();
+
+            var asistenciasDto = _mapper.Map<List<AsistenciaDto>>(asistencias);
+
+            return asistenciasDto;
         }
     }
 }

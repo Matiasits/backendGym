@@ -8,6 +8,7 @@ namespace TheGymProject.Mappings
         public AsistenciaProfile()
         {
             CreateMap<Asistencia, AsistenciaDto>().ReverseMap();
+            CreateMap<Alumno, AlumnoDto>().ReverseMap();
         }
     }
 }

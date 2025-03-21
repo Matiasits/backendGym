@@ -8,5 +8,6 @@ namespace TheGymProject.InterfacesService
         RegistrarAsistenciaAlumno(AsistenciaDto asistenciaDto);
 
         Task<(List<AlumnoDto> Alumnos, int Cantidad, decimal GananciaTotal)> ObtenerResumenMensual();
+        Task<List<AsistenciaDto>> ObtenerAsistenciasDelDia();
     }
 }

@@ -49,5 +49,13 @@ namespace TheGymProject.Controllers
                 Alumnos = alumnos
             });
         }
+
+        [HttpGet("del-dia")]
+        public async Task<IActionResult> ObtenerAsistenciasDelDia()
+        {
+            var asistencias = await _asistenciaService.ObtenerAsistenciasDelDia();
+            
+            return Ok(asistencias);
+        }
     }
 }

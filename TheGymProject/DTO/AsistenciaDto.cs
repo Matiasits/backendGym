@@ -4,5 +4,6 @@
     {
         public int DNIAlumno { get; set; }
         public DateTime FHRegistro { get; set; }
+        public AlumnoDto? Alumno { get; set; }
     }
 }
